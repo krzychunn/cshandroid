@@ -1,16 +1,12 @@
-package utils;
+package com.nn.krzychu.cloudsmarthome.util;
 
 /**
  * Created by Krzychu on 09.03.2017.
  */
 
-import android.os.AsyncTask;
 import android.util.Base64;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.nn.krzychu.cloudsmarthome.MainActivity;
-import com.nn.krzychu.cloudsmarthome.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +16,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class NetClient{
+
+
+    public static String getToken(String username, String pass){
+        String userCredentials = username+":"+pass;
+        return "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.NO_WRAP));
+    }
 
     public String get(String path) {
 

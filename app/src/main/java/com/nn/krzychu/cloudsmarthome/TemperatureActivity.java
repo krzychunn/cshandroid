@@ -1,25 +1,64 @@
 package com.nn.krzychu.cloudsmarthome;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.nn.krzychu.cloudsmarthome.api.NetworkService;
+import com.nn.krzychu.cloudsmarthome.api.NetworkServiceProvider;
+import com.nn.krzychu.cloudsmarthome.util.NetClient;
+import com.nn.krzychu.cloudsmarthome.util.SharedPrefConst;
+
 import java.util.Date;
 
-import utils.NetClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TemperatureActivity extends AppCompatActivity {
 
     TextView currentTemperature;
     TextView temperatureTimestamp;
 
+    private NetworkService networkService;
+    private SharedPreferences sharedPreferences;
+    private String username;
+    private String pass;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String appNAme = sharedPreferences.getString(SharedPrefConst.APP_NAME,"");
+        username = sharedPreferences.getString(SharedPrefConst.USERNAME,"");
+        pass = sharedPreferences.getString(SharedPrefConst.PASS,"");
+        networkService = NetworkServiceProvider.getNetworkService(appNAme);
+
+        //TODO: Usun jezeli nie potrzebujesz - ja to dodalem bo nie dziala z jakiegos powodu bindowanie z XML - stawiam na zasieg metody loadData
+        findViewById(R.id.loadData).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                loadData(v);
+                networkService.getLastTemperature(NetClient.getToken(username,pass)).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        currentTemperature.setText(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
     }
 
     protected void loadData(View v){
