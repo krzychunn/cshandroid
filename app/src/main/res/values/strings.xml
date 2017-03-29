@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Cloud Smart Home</string>
+
+    <string name="appName">Heroku app name</string>
+    <string name="loginText">Login</string>
+    <string name="passwordText">Password</string>
+    <string name="signIn">Sign in</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="light">Light</string>
+    <string name="sound">Sound</string>
+    <string name="gas">Gas</string>
+
+    <string name="temperatureTitle">Temperature</string>
+    <string name="temperatureInput"></string>
+    <string name="temperatureTimestamp"></string>
+    <string name="loadData">Load</string>
+    <string name="minTemperature">Min. temp.</string>
+    <string name="maxTemperature">Max. temp.</string>
+    <string name="heating">Heating</string>
+    <string name="airCondition">Air condition</string>
+    <string name="setOptimalTemperature">Set optimal temperature</string>
+    <string name="setMinimumTemperature"></string>
+    <string name="setMaxiumumTemperature"></string>
+    <string name="optimalTemperatureIsActive">Active</string>
+    <string name="saveTemperatureSettings">Save</string>
+
+</resources>
