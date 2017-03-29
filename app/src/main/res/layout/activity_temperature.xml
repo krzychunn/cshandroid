@@ -178,4 +178,14 @@
         android:id="@+id/loadData"
         android:onClick="loadData" />
 
+    <!--Dodane do testow usunac pozniej-->
+    <TextView
+        android:id="@+id/currentTemperature"
+        android:layout_marginLeft="56dp"
+        tools:text="Current temperature"
+        android:layout_toRightOf="@+id/loadData"
+        android:layout_alignBaseline="@+id/loadData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
