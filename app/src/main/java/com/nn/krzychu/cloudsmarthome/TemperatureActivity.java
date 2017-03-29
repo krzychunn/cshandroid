@@ -22,7 +22,7 @@ import retrofit2.Response;
 
 public class TemperatureActivity extends AppCompatActivity {
 
-    TextView currentTemperature;
+    TextView currentTemperature = null;
     TextView temperatureTimestamp;
 
     private NetworkService networkService;
@@ -35,6 +35,10 @@ public class TemperatureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
+        //Tego brakowalo
+        currentTemperature = (TextView) findViewById(R.id.currentTemperature);
+
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String appNAme = sharedPreferences.getString(SharedPrefConst.APP_NAME,"");
         username = sharedPreferences.getString(SharedPrefConst.USERNAME,"");

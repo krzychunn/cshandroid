@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(SharedPrefConst.APP_NAME, appName);
         editor.putString(SharedPrefConst.USERNAME, login);
         editor.putString(SharedPrefConst.PASS, password);
-        editor.commit();
+        editor.apply();
 
         //this.login = ((EditText) findViewById(R.id.loginInput)).getText().toString();
         //this.password = ((EditText) findViewById(R.id.passwordInput)).getText().toString();

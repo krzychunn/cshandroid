@@ -13,16 +13,6 @@ import retrofit2.http.Path;
 
 public interface NetworkService {
 
-//    String userCredentials = MainActivity.getLogin()+":"+MainActivity.getPassword();
-//    String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.NO_WRAP));
-//    URL url = new URL(MainActivity.getAppName() + path);
-//    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("GET");
-//            conn.setRequestProperty ("Authorization", basicAuth);
-//            conn.setRequestProperty("Accept", "application/json");
-
-
-
     @GET("matches")
     Call<SampleResponseModel> getSample();
 
