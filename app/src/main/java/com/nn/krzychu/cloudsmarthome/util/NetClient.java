@@ -23,7 +23,7 @@ public class NetClient{
         return "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.NO_WRAP));
     }
 
-    public String get(String path) {
+/*    public String get(String path) {
 
         String output = null;
 
@@ -62,5 +62,5 @@ public class NetClient{
 
         return output;
 
-    }
+    }*/
 }

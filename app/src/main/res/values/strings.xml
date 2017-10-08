@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Cloud Smart Home</string>
 
-    <string name="appName">Heroku app name</string>
+    <string name="appName">App name</string>
     <string name="loginText">Login</string>
     <string name="passwordText">Password</string>
     <string name="signIn">Sign in</string>
@@ -10,19 +10,37 @@
     <string name="light">Light</string>
     <string name="sound">Sound</string>
     <string name="gas">Gas</string>
+    <string name="controlParameters">Control parameters</string>
+    <string name="systemProperties">System properties</string>
+    <string name="logIn">Log in...</string>
+    <string name="pleaseWait">Please wait</string>
+    <string name="generalError">An error occurred. Try again later.</string>
+    <string name="errorLogin">Wrong app name, login, password or app is not available. Try again later.</string>
 
     <string name="temperatureTitle">Temperature</string>
-    <string name="temperatureInput"></string>
-    <string name="temperatureTimestamp"></string>
-    <string name="loadData">Load</string>
-    <string name="minTemperature">Min. temp.</string>
-    <string name="maxTemperature">Max. temp.</string>
+    <string name="getData">Get</string>
+    <string name="minTemperature">Min. temperature</string>
+    <string name="maxTemperature">Max. temperature</string>
     <string name="heating">Heating</string>
     <string name="airCondition">Air condition</string>
     <string name="setOptimalTemperature">Set optimal temperature</string>
-    <string name="setMinimumTemperature"></string>
-    <string name="setMaxiumumTemperature"></string>
     <string name="optimalTemperatureIsActive">Active</string>
-    <string name="saveTemperatureSettings">Save</string>
+    <string name="postSettings">Post</string>
+    <string name="enabledState">enabled</string>
+    <string name="disabledState">disabled</string>
 
+    <string name="humidityTitle">Humidity</string>
+    <string name="minHumidity">Min. humidity</string>
+    <string name="humidifier">Humidifier</string>
+    <string name="setOptimalHumidity">Set optimal humidity</string>
+
+    <string name="lightTitle">Light intensity</string>
+    <string name="minLight">Min. light intensity</string>
+    <string name="lighting">Lighting</string>
+    <string name="setOptimalLight">Set optimal light intensity</string>
+
+    <string name="gasTitle">Gas density</string>
+    <string name="maxGas">Max. gas density</string>
+    <string name="alarm">Alarm</string>
+    <string name="setOptimalGas">Set optimal gas density</string>
 </resources>

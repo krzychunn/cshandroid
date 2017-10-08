@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cloud Smart Home</string>
+
+    <string name="appName">Nazwa aplikacji</string>
+    <string name="loginText">Login</string>
+    <string name="passwordText">Hasło</string>
+    <string name="signIn">Zaloguj</string>
+    <string name="temperature">Temperatura</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="light">Światło</string>
+    <string name="gas">Gazy</string>
+    <string name="controlParameters">Kontrolowane parametry</string>
+    <string name="systemProperties">Parametry systemu</string>
+    <string name="logIn">Logowanie...</string>
+    <string name="pleaseWait">Proszę czekać</string>
+    <string name="generalError">Wystąpił błąd. Spróbuj ponownie później.</string>
+    <string name="errorLogin">Błędna nazwa aplikacji, login, hasło lub aplikacja jest niedostępna. Spróbuj ponownie później.</string>
+
+    <string name="temperatureTitle">Temperatura</string>
+    <string name="getData">Pobierz</string>
+    <string name="minTemperature">Min. temperatura</string>
+    <string name="maxTemperature">Max. temperatura</string>
+    <string name="heating">Ogrzewanie</string>
+    <string name="airCondition">Klimatyzacja</string>
+    <string name="setOptimalTemperature">Ustaw optymalną temperaturę</string>
+    <string name="postSettings">Zapisz ustawienia</string>
+    <string name="enabledState">włączone</string>
+    <string name="disabledState">wyłączone</string>
+
+    <string name="humidityTitle">Wilgotność powietrza</string>
+    <string name="minHumidity">Min. wilgotność</string>
+    <string name="humidifier">Nawilżacz</string>
+    <string name="setOptimalHumidity">Ustaw optymalną wilgotność</string>
+
+    <string name="lightTitle">Natężenie światła</string>
+    <string name="minLight">Min. nat. światła</string>
+    <string name="lighting">Oświetlenie</string>
+    <string name="setOptimalLight">Ustaw optymalne natężenie światła</string>
+
+    <string name="gasTitle">Stężenie gazów niebezpiecznych</string>
+    <string name="maxGas">Max. st. gazów</string>
+    <string name="alarm">Alarm</string>
+    <string name="setOptimalGas">Ustaw optymalne st. gazów</string>
+</resources>

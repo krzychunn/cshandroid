@@ -1,90 +1,126 @@
 package com.nn.krzychu.cloudsmarthome;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.nn.krzychu.cloudsmarthome.api.NetworkService;
+import com.nn.krzychu.cloudsmarthome.api.NetworkServiceProvider;
+import com.nn.krzychu.cloudsmarthome.util.NetClient;
 import com.nn.krzychu.cloudsmarthome.util.SharedPrefConst;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String login = "knn";
+    /*private static String login = "knn";
     private static String password = "nnk";
-    private static String appName = "https://arcane-escarpment-70375.herokuapp.com";
+    private static String appName = "https://arcane-escarpment-70375.herokuapp.com";*/
+    private ProgressDialog progressDialog;
+    private static String login;
+    private static String password;
+    private static String appName;
+    private static String appAddress;
+    public static String LOGIN = "username";
+    public static String PASSWORD = "password";
+    public static String APP_NAME = "app_name";
+    public static String APP_ADDRESS = "app_address";
     private SharedPreferences sharedPreferences;
-
-    public static String getLogin() {
-        return login;
-    }
-
-    public static void setLogin(String log) {
-        login = log;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String pass) {
-        password = pass;
-    }
-
-    public static String getAppName() {
-        return appName;
-    }
-
-    public static void setAppName(String appN) {
-        appName = appN;
-    }
+    private NetworkService networkService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressDialog = new ProgressDialog(MainActivity.this);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = getSharedPreferences(SharedPrefConst.PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        this.login = sharedPreferences.getString(LOGIN, null);
+        this.password = sharedPreferences.getString(PASSWORD, null);
+        this.appName = sharedPreferences.getString(APP_NAME, null);
+        this.appAddress = sharedPreferences.getString(APP_ADDRESS, null);
+        if(login != null) {
+            ((EditText) findViewById(R.id.setLogin)).setText(login);
+        }
+        if(password != null) {
+            ((EditText) findViewById(R.id.setPassword)).setText(password);
+        }
+        if(appName != null) {
+            ((EditText) findViewById(R.id.setAppName)).setText(appName);
+        }
 
-        //TODO: Usun jezeli nie potrzebujesz
-        findViewById(R.id.signIn).setOnClickListener(new View.OnClickListener() {
+/*        findViewById(R.id.signIn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn(v);
             }
+        });*/
+    }
+
+    protected void signIn(final View v){
+
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        this.login = ((EditText) findViewById(R.id.setLogin)).getText().toString();
+        this.password = ((EditText) findViewById(R.id.setPassword)).getText().toString();
+        this.appName = ((EditText) findViewById(R.id.setAppName)).getText().toString();
+        preferencesEditor.putString(APP_NAME, this.appName).commit();
+        preferencesEditor.apply();
+        preferencesEditor.putString(APP_ADDRESS, SharedPrefConst.HTTPS + sharedPreferences.getString(APP_NAME, null) + SharedPrefConst.HEROKU).commit();
+        preferencesEditor.putString(LOGIN, this.login).commit();
+        preferencesEditor.putString(PASSWORD, this.password).commit();
+        preferencesEditor.apply();
+
+        networkService = NetworkServiceProvider.getNetworkService(sharedPreferences.getString(APP_ADDRESS, null));
+
+//        progressDialog.setMax(100);
+        progressDialog.setMessage(getResources().getString(R.string.pleaseWait));
+        progressDialog.setTitle(R.string.logIn);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        // show it
+        progressDialog.show();
+
+        networkService.getLastMeasurement(NetClient.getToken(sharedPreferences.getString(LOGIN, null), sharedPreferences.getString(PASSWORD, null))).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                    jsonObject.getLong("timeStamp");
+                    progressDialog.dismiss();
+                    openParametersWindow(v);
+                } catch (Exception e) {
+                    login=null;
+                    password=null;
+                    appName=null;
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), R.string.errorLogin, Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), R.string.errorLogin, Toast.LENGTH_LONG).show();
+            }
         });
+
     }
 
-    protected void signIn(View v){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SharedPrefConst.APP_NAME, appName);
-        editor.putString(SharedPrefConst.USERNAME, login);
-        editor.putString(SharedPrefConst.PASS, password);
-        editor.apply();
 
-        //this.login = ((EditText) findViewById(R.id.loginInput)).getText().toString();
-        //this.password = ((EditText) findViewById(R.id.passwordInput)).getText().toString();
-        //this.appName = ((EditText) findViewById(R.id.appNameInput)).getText().toString();
+    public void openParametersWindow(View v){
+        Intent parameters = new Intent(this, ParametersActivity.class);
+        startActivity(parameters);
     }
 
-    public void openTemperatureWindow(View v){
-        Intent temperature = new Intent(this, TemperatureActivity.class);
-        startActivity(temperature);
-    }
-
-    public void openHumidityWindow(View v){
-        Intent humidity = new Intent(this, HumidityActivity.class);
-        startActivity(humidity);
-    }
-
-    public void openLightWindow(View v){
-        Intent light = new Intent(this, LightActivity.class);
-        startActivity(light);
-    }
-
-    public void openGasWindow(View v){
-        Intent gas = new Intent(this, GasActivity.class);
-        startActivity(gas);
-    }
 }

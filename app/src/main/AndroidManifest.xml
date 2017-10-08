@@ -10,17 +10,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TemperatureActivity" />
-        <activity android:name=".HumidityActivity" />
-        <activity android:name=".LightActivity" />
-        <activity android:name=".GasActivity"></activity>
+        <activity android:name=".ParametersActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".TemperatureActivity"
+                android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".HumidityActivity"
+                android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".LightActivity"
+                android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".GasActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

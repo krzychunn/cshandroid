@@ -1,20 +1,25 @@
 package com.nn.krzychu.cloudsmarthome;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.nn.krzychu.cloudsmarthome.api.NetworkService;
 import com.nn.krzychu.cloudsmarthome.api.NetworkServiceProvider;
 import com.nn.krzychu.cloudsmarthome.util.NetClient;
 import com.nn.krzychu.cloudsmarthome.util.SharedPrefConst;
 
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,12 +28,21 @@ import retrofit2.Response;
 public class TemperatureActivity extends AppCompatActivity {
 
     TextView currentTemperature = null;
-    TextView temperatureTimestamp;
+    TextView temperatureTimestamp = null;
+    TextView currentMinTemperature = null;
+    TextView currentMaxTemperature = null;
+    TextView currentAirCondition = null;
+    TextView currentHeating = null;
+    EditText setMinimumTemperature = null;
+    EditText setMaximumTemperature = null;
+    Switch optimalTemperatureIsActive = null;
 
     private NetworkService networkService;
     private SharedPreferences sharedPreferences;
+    private String appAddress;
     private String username;
     private String pass;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yyyy");
 
 
     @Override
@@ -37,23 +51,118 @@ public class TemperatureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_temperature);
         //Tego brakowalo
         currentTemperature = (TextView) findViewById(R.id.currentTemperature);
+        temperatureTimestamp = (TextView) findViewById(R.id.temperatureTimestamp);
+        currentMinTemperature = (TextView) findViewById(R.id.currentMinTemp);
+        currentMaxTemperature = (TextView) findViewById(R.id.currentMaxTemp);
+        currentAirCondition = (TextView) findViewById(R.id.currentAirCondition);
+        currentHeating = (TextView) findViewById(R.id.currentHeating);
+        setMinimumTemperature = (EditText) findViewById(R.id.setMinimumTemperature);
+        setMaximumTemperature = (EditText) findViewById(R.id.setMaximumTemperature);
 
+        sharedPreferences = getSharedPreferences(SharedPrefConst.PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        appAddress = sharedPreferences.getString(MainActivity.APP_ADDRESS, "");
+        username = sharedPreferences.getString(MainActivity.LOGIN, "");
+        pass = sharedPreferences.getString(MainActivity.PASSWORD, "");
+        System.out.println("appAddress=" + appAddress);
+        System.out.println("username=" + username);
+        System.out.println("pass=" + pass);
+        networkService = NetworkServiceProvider.getNetworkService(appAddress);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String appNAme = sharedPreferences.getString(SharedPrefConst.APP_NAME,"");
-        username = sharedPreferences.getString(SharedPrefConst.USERNAME,"");
-        pass = sharedPreferences.getString(SharedPrefConst.PASS,"");
-        networkService = NetworkServiceProvider.getNetworkService(appNAme);
+        networkService.getLastMeasurement(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                    currentTemperature.setText(jsonObject.getString("temperature") + " °C");
+                    temperatureTimestamp.setText(dateFormat.format((jsonObject.getLong("timeStamp"))));
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
 
-        //TODO: Usun jezeli nie potrzebujesz - ja to dodalem bo nie dziala z jakiegos powodu bindowanie z XML - stawiam na zasieg metody loadData
-        findViewById(R.id.loadData).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+        networkService.getLastOptimalTemperature(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    System.out.println("KNN: " + response.body());
+                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                    currentMinTemperature.setText(jsonObject.getString("minimumTemperature") + " °C");
+                    currentMaxTemperature.setText(jsonObject.getString("maximumTemperature") + " °C");
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+        networkService.getLastAirCondition(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    System.out.println("KNN: " + response.body());
+                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                    if (jsonObject.getString("state").equals("false")) {
+                        currentAirCondition.setText(getString(R.string.disabledState));
+                    } else if (jsonObject.getString("state").equals("true")) {
+                        currentAirCondition.setText(getString(R.string.enabledState));
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+        networkService.getLastHeating(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    System.out.println("KNN: " + response.body());
+                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                    if (jsonObject.getString("state").equals("false")) {
+                        currentHeating.setText(getString(R.string.disabledState));
+                    } else if (jsonObject.getString("state").equals("true")) {
+                        currentHeating.setText(getString(R.string.enabledState));
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+
+        findViewById(R.id.postTemperatureSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                loadData(v);
-                networkService.getLastTemperature(NetClient.getToken(username,pass)).enqueue(new Callback<String>() {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("minimumTemperature", setMinimumTemperature.getText().toString());
+                jsonObject.addProperty("maximumTemperature", setMaximumTemperature.getText().toString());
+
+                System.out.println("KNN jsonObject: " + jsonObject);
+
+                networkService.postOptimalTemperature(NetClient.getToken(username, pass), jsonObject).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        currentTemperature.setText(response.body());
+
                     }
 
                     @Override
@@ -63,57 +172,5 @@ public class TemperatureActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    protected void loadData(View v){
-        new NetTask(this).execute("/measurements/getLastTemperature", "/measurements/getLastTimestamp", "/optimalTemperature/getLast", "/heating/getLast", "/airCondition/getLast");
-        currentTemperature = ((TextView) (findViewById(R.id.temperature)));
-        temperatureTimestamp = ((TextView) (findViewById(R.id.temperatureTimestamp)));
-    }
-
-    private class NetTask extends AsyncTask<String, Void, String[]>{
-
-        public NetTask(TemperatureActivity temperatureActivityContext) {
-            this.temperatureActivityContext = temperatureActivityContext;
-        }
-
-        private Context temperatureActivityContext = null;
-
-        @Override
-        protected String[] doInBackground(String... strings) {
-            String []values = new String[6];
-            NetClient netClient = new NetClient();
-            values[0] = netClient.get(strings[0]);
-            values[1] = netClient.get(strings[1]);
-            return values;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String[] values) {
-
-            currentTemperature.setText(values[0]);
-            temperatureTimestamp.setText((new Date(Long.parseLong(values[1]))).toString());
-            super.onPostExecute(values);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onCancelled(String[] s) {
-            super.onCancelled(s);
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
     }
 }
