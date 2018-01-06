@@ -41,9 +41,38 @@ public class HumidityActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_humidity);
 
+        getLastMeasurements();
+
+        findViewById(R.id.postHumiditySettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (setMinimumHumidity.getText() != null) {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("minimumHumidity", setMinimumHumidity.getText().toString());
+
+                    networkService.postMinimumHumidity(NetClient.getToken(username, pass), jsonObject).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            getLastMeasurements();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            getLastMeasurements();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.dataFormatError, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void getLastMeasurements() {
         currentHumidity = (TextView) findViewById(R.id.currentHumidity);
         humidityTimestamp = (TextView) findViewById(R.id.humidityTimestamp);
         currentMinHumidity = (TextView) findViewById(R.id.currentMinHumidity);
@@ -54,9 +83,6 @@ public class HumidityActivity extends AppCompatActivity {
         appAddress = sharedPreferences.getString(MainActivity.APP_ADDRESS, null);
         username = sharedPreferences.getString(MainActivity.LOGIN, null);
         pass = sharedPreferences.getString(MainActivity.PASSWORD, null);
-        System.out.println("appAddress=" + appAddress);
-        System.out.println("username=" + username);
-        System.out.println("pass=" + pass);
         networkService = NetworkServiceProvider.getNetworkService(appAddress);
 
         networkService.getLastMeasurement(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -81,7 +107,6 @@ public class HumidityActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
-                    System.out.println("KNN getLastMinimumHumidity: " + response.body());
                     JSONObject jsonObject = new JSONObject(response.body().toString());
                     currentMinHumidity.setText(jsonObject.getString("minimumHumidity") + " %");
                 } catch (Exception e) {
@@ -99,7 +124,6 @@ public class HumidityActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
-                    System.out.println("KNN: " + response.body());
                     JSONObject jsonObject = new JSONObject(response.body().toString());
                     if (jsonObject.getString("state").equals("false")) {
                         currentHumidifier.setText(getString(R.string.disabledState));
@@ -115,28 +139,6 @@ public class HumidityActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
 
-            }
-        });
-
-        findViewById(R.id.postHumiditySettings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("minimumHumidity", setMinimumHumidity.getText().toString());
-
-                System.out.println("KNN jsonObject: " + jsonObject);
-
-                networkService.postMinimumHumidity(NetClient.getToken(username, pass), jsonObject).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                    }
-                });
             }
         });
     }

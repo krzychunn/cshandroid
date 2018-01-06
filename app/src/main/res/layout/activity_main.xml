@@ -45,12 +45,13 @@
                 android:id="@+id/setAppName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center"/>
+                android:inputType="text"
+                android:textAlignment="textStart"/>
 
         </TableRow>
 
@@ -77,8 +78,8 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
+                android:inputType="text"
+                android:textAlignment="textStart" />
 
         </TableRow>
 
@@ -102,8 +103,8 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                android:textAlignment="center"
-                android:inputType="textPersonName|textPassword"
+                android:textAlignment="textStart"
+                android:inputType="text|textPassword"
                 android:ems="10"
                 android:id="@+id/setPassword"
                 android:layout_width="fill_parent" />

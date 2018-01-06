@@ -15,7 +15,8 @@
     <string name="logIn">Logowanie...</string>
     <string name="pleaseWait">Proszę czekać</string>
     <string name="generalError">Wystąpił błąd. Spróbuj ponownie później.</string>
-    <string name="errorLogin">Błędna nazwa aplikacji, login, hasło lub aplikacja jest niedostępna. Spróbuj ponownie później.</string>
+    <string name="loginError">Błędna nazwa aplikacji, login, hasło lub aplikacja jest niedostępna. Spróbuj ponownie później.</string>
+    <string name="dataFormatError">Wprowadź poprawne dane.</string>
 
     <string name="temperatureTitle">Temperatura</string>
     <string name="getData">Pobierz</string>

@@ -44,6 +44,34 @@ public class LightActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light);
 
+        getLastMeasurements();
+
+        findViewById(R.id.postLightSettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(setMinimumLight.getText() != null) {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("minimumLight", setMinimumLight.getText().toString());
+
+                    networkService.postMinimumLight(NetClient.getToken(username, pass), jsonObject).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            getLastMeasurements();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            getLastMeasurements();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.dataFormatError, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void getLastMeasurements() {
         currentLight = (TextView) findViewById(R.id.currentLight);
         lightTimestamp = (TextView) findViewById(R.id.lightTimestamp);
         currentMinLight = (TextView) findViewById(R.id.currentMinLight);
@@ -54,9 +82,6 @@ public class LightActivity extends AppCompatActivity {
         appAddress = sharedPreferences.getString(MainActivity.APP_ADDRESS, "");
         username = sharedPreferences.getString(MainActivity.LOGIN, "");
         pass = sharedPreferences.getString(MainActivity.PASSWORD, "");
-        System.out.println("appAddress=" + appAddress);
-        System.out.println("username=" + username);
-        System.out.println("pass=" + pass);
         networkService = NetworkServiceProvider.getNetworkService(appAddress);
 
         networkService.getLastMeasurement(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -81,7 +106,6 @@ public class LightActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
-                    System.out.println("KNN getLastMinimumLight: " + response.body());
                     JSONObject jsonObject = new JSONObject(response.body().toString());
                     currentMinLight.setText(jsonObject.getString("minimumLight") + " u");
                 } catch (Exception e) {
@@ -99,7 +123,6 @@ public class LightActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
-                    System.out.println("KNN: " + response.body());
                     JSONObject jsonObject = new JSONObject(response.body().toString());
                     if (jsonObject.getString("state").equals("false")) {
                         currentLighting.setText(getString(R.string.disabledState));
@@ -115,28 +138,6 @@ public class LightActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
 
-            }
-        });
-
-        findViewById(R.id.postLightSettings).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("minimumLight", setMinimumLight.getText().toString());
-
-                System.out.println("KNN jsonObject: " + jsonObject);
-
-                networkService.postMinimumLight(NetClient.getToken(username, pass), jsonObject).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                    }
-                });
             }
         });
     }

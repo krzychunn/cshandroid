@@ -15,7 +15,8 @@
     <string name="logIn">Log in...</string>
     <string name="pleaseWait">Please wait</string>
     <string name="generalError">An error occurred. Try again later.</string>
-    <string name="errorLogin">Wrong app name, login, password or app is not available. Try again later.</string>
+    <string name="loginError">Wrong app name, login, password or app is not available. Try again later.</string>
+    <string name="dataFormatError">Insert correct data.</string>
 
     <string name="temperatureTitle">Temperature</string>
     <string name="getData">Get</string>
