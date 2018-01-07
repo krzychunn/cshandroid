@@ -50,7 +50,7 @@ public class HumidityActivity extends AppCompatActivity {
         findViewById(R.id.postHumiditySettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (setMinimumHumidity.getText() != null) {
+                if (setMinimumHumidity.getText().toString().trim().length() != 0 ) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("minimumHumidity", setMinimumHumidity.getText().toString());
 

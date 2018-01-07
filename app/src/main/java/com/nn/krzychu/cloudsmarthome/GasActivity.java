@@ -50,7 +50,7 @@ public class GasActivity extends AppCompatActivity {
         findViewById(R.id.postGasSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (setMaximumGas.getText() != null) {
+                if (setMaximumGas.getText().toString().trim().length() != 0 ) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("maximumGas", setMaximumGas.getText().toString());
 

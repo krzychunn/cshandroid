@@ -49,7 +49,7 @@ public class LightActivity extends AppCompatActivity {
         findViewById(R.id.postLightSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(setMinimumLight.getText() != null) {
+                if(setMinimumLight.getText().toString().trim().length() != 0 ) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("minimumLight", setMinimumLight.getText().toString());
 

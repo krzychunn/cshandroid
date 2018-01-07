@@ -54,7 +54,7 @@ public class TemperatureActivity extends AppCompatActivity {
         findViewById(R.id.postTemperatureSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(setMinimumTemperature.getText() != null && setMaximumTemperature.getText() != null) {
+                if(setMinimumTemperature.getText().toString().trim().length() != 0 && setMaximumTemperature.getText().toString().trim().length() != 0) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("minimumTemperature", setMinimumTemperature.getText().toString());
                     jsonObject.addProperty("maximumTemperature", setMaximumTemperature.getText().toString());
