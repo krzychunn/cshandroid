@@ -108,7 +108,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastOptimalTemperature(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -126,7 +126,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastAirCondition(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -147,7 +147,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastHeating(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -168,7 +168,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
     }

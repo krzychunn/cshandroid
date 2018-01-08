@@ -100,7 +100,7 @@ public class HumidityActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastMinimumHumidity(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -117,7 +117,7 @@ public class HumidityActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastHumidifier(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -138,7 +138,7 @@ public class HumidityActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -100,7 +100,7 @@ public class GasActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastMaximumGas(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -117,7 +117,7 @@ public class GasActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
         networkService.getLastAlarm(NetClient.getToken(username, pass)).enqueue(new Callback<Object>() {
@@ -138,7 +138,7 @@ public class GasActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), R.string.generalError, Toast.LENGTH_SHORT).show();
             }
         });
     }
