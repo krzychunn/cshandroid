@@ -24,9 +24,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*private static String login = "knn";
-    private static String password = "nnk";
-    private static String appName = "https://arcane-escarpment-70375.herokuapp.com";*/
     private ProgressDialog progressDialog;
     private static String login;
     private static String password;
